@@ -1,18 +1,20 @@
 import xerial.sbt.Sonatype._
 
-ThisBuild / version      := "0.0.3"
-ThisBuild / scalaVersion := "2.13.11"
+ThisBuild / version      := "0.1.0"
+ThisBuild / scalaVersion := "2.13.16"
+
+lazy val root = project.in(file(".")).settings(publish / skip := true, publishLocal / skip := true)
 
 lazy val core = crossProject(JVMPlatform, NativePlatform, JSPlatform)
   .crossType(CrossType.Pure)
-  .in(file("."))
+  .in(file("core"))
   .settings(
     organization           := "net.andimiller",
     name                   := "decline-completion",
-    crossScalaVersions     := List("2.13.11", "3.3.0"),
+    crossScalaVersions     := List("2.13.16", "3.3.5"),
     libraryDependencies ++= List(
-      "com.monovore"  %%% "decline"           % "2.4.1",
-      "org.typelevel" %%% "munit-cats-effect" % "2.0.0-M3" % Test
+      "com.monovore"  %%% "decline" % "2.5.0",
+      "org.scalameta" %%% "munit"   % "1.1.0" % Test
     ),
     publishTo              := sonatypePublishTo.value,
     licenses               := Seq("Apache 2.0" -> url("https://opensource.org/license/apache-2-0")),

@@ -1,22 +1,19 @@
 package net.andimiller.decline.completion
 
-import cats.effect.IO
 import cats.implicits._
 import com.monovore.decline.completion.Folder
 import com.monovore.decline.completion.Folder.CompleteableCommand
 import com.monovore.decline.{Command, Opts}
-import munit.CatsEffectSuite
 
-class CompletionSpec extends CatsEffectSuite {
+class CompletionSpec extends munit.FunSuite {
   test("Folder should fold a cli into a model we can use") {
     val cli = Command("foo", "the foo command") {
       (Opts.argument[String]("file.txt"), Opts.flag("verbose", "enable verbose logs").orNone.map(_.isDefined)).mapN { case (f, v) =>
         123
       }
     }
-    IO {
-      Folder.buildModel(cli)
-    }.assertEquals(
+    assertEquals(
+      Folder.buildModel(cli),
       CompleteableCommand(
         "foo",
         "the foo command",
@@ -44,9 +41,7 @@ class CompletionSpec extends CatsEffectSuite {
       }
       add orElse multiply
     }
-    IO {
-      Completion.bashCompletion(deeper)
-      Completion.zshBashcompatCompletion(deeper)
-    }
+    Completion.bashCompletion(deeper)
+    Completion.zshBashcompatCompletion(deeper)
   }
 }
